@@ -4,7 +4,7 @@ load_dotenv()
 from anthropic import Anthropic
 
 client = Anthropic()
-model = "claude-opus-4-7"
+model = "claude-sonnet-4-5"
 
 def add_user_message(messages, text):
     messages.append({"role": "user", "content": text})

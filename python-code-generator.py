@@ -12,16 +12,22 @@ def add_user_message(messages, text):
 def add_assistant_message(messages, text):
     messages.append({"role": "assistant", "content": text})
 
-def chat(messages):
-    response = client.messages.create(
-        model=model,
-        max_tokens=1024,
-        messages=messages,
-        cache_control={"type": "ephemeral"},
-    )
-    return response.content[0].text
+def chat(messages, system=None):
+    params = {
+        "model": model,
+        "max_tokens": 4096,
+        "messages": messages,
+    }
+
+    if system:
+        params["system"] = system
+
+    message = client.messages.create(**params)
+    return message.content[0].text
 
 messages = []
+
+system_prompt = "You are a Python engineer who writes very concise code."
 
 while True:
     user_input = input("> ")
@@ -30,7 +36,7 @@ while True:
 
     print("---")
     add_user_message(messages, user_input)
-    response = chat(messages)
+    response = chat(messages, system=system_prompt)
     add_assistant_message(messages, response)
     print(response)
     print("---")
